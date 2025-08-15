@@ -5,11 +5,32 @@ This repository is part of a Git & GitHub bootcamp. It is designed to help you l
 ## Table of Contents
 - [Project Description](#project-description)
 - [Git Basics: Add and Commit](#git-basics-add-and-commit)
-- [Git Log: Viewing Commit History](#git-log-viewing-commit-history)
-- [Pushing Code to a Remote Branch](#pushing-code-to-a-remote-branch)
+- [Repository History](#repository-history)
+  - [Git Log: Viewing History](#git-log-viewing-history)
+  - [Undoing Changes](#undoing-changes)
+- [Remote Operations](#remote-operations)
+  - [Authentication Setup](#authentication-setup)
+  - [Pushing Code](#pushing-code)
+  - [Fetching and Pulling](#fetching-and-pulling)
 - [Branch Management](#branch-management)
   - [Branch Operations](#branch-operations)
   - [Best Practices for Branch Management](#best-practices-for-branch-management)
+- [Merging and Collaboration](#merging-and-collaboration)
+  - [Types of Merges](#types-of-merges)
+  - [Handling Merge Conflicts](#handling-merge-conflicts)
+  - [Pull Request Workflow](#pull-request-workflow)
+- [Advanced Git](#advanced-git)
+  - [Git Stash](#git-stash)
+  - [Git Rebase](#git-rebase)
+  - [Git Tags](#git-tags)
+  - [Git Hooks](#git-hooks)
+- [Best Practices and Workflows](#best-practices-and-workflows)
+  - [Commit Message Conventions](#commit-message-conventions)
+  - [Git Workflow Strategies](#git-workflow-strategies)
+  - [Code Review Guidelines](#code-review-guidelines)
+- [Troubleshooting](#troubleshooting)
+  - [Common Issues](#common-issues)
+  - [Error Messages](#error-messages)
 
 
 ## Project Description
@@ -79,6 +100,75 @@ The `git log` command allows you to view the history of all commits made to a re
 - Understand the history of changes in your repository.
 - Track who made specific changes and when.
 - Review commit messages for context on past updates.
+
+### Undoing Changes
+
+Git provides several ways to undo changes, each serving a different purpose:
+
+#### Discarding Uncommitted Changes
+```bash
+# Discard changes in working directory
+git restore <file>
+
+# Discard changes in staging area
+git restore --staged <file>
+
+# Discard all local changes
+git restore .
+```
+
+#### Modifying Commits
+```bash
+# Modify the last commit
+git commit --amend
+
+# Modify the last commit message
+git commit --amend -m "New message"
+
+# Add files to the last commit
+git add <forgotten-file>
+git commit --amend --no-edit
+```
+
+#### Reverting Commits
+```bash
+# Create a new commit that undoes a previous commit
+git revert <commit-hash>
+
+# Revert the last commit
+git revert HEAD
+```
+
+#### Reset Operations
+```bash
+# Soft reset - move HEAD but keep changes staged
+git reset --soft HEAD~1
+
+# Mixed reset - move HEAD and unstage changes (default)
+git reset HEAD~1
+
+# Hard reset - move HEAD and discard all changes
+git reset --hard HEAD~1
+```
+
+⚠️ **Warning**: Be careful with `reset --hard` as it permanently discards changes!
+
+#### Best Practices for Undoing Changes
+1. **Before Undoing**:
+   - Always ensure you have a clean working directory
+   - Create a backup branch if unsure
+   - Understand which changes will be affected
+
+2. **Choosing the Right Command**:
+   - Use `restore` for uncommitted changes
+   - Use `revert` for committed changes that are already pushed
+   - Use `reset` for local commits only
+   - Use `commit --amend` only for the last commit
+
+3. **Safety Measures**:
+   - Avoid `reset --hard` on shared branches
+   - Prefer `revert` over `reset` for public changes
+   - Always verify the commit hash before reverting
 
 ### Pushing Code to a Remote Branch
 
@@ -214,3 +304,275 @@ git checkout -b <new-branch-name>
    - Always verify the merge status before deletion
    - Use `-d` instead of `-D` as a safe default
    - Keep your local branch list clean by removing merged branches
+
+## Merging Branches
+
+Understanding how to merge branches is crucial for collaborative development. This section covers different types of merges and how to handle merge conflicts.
+
+### Types of Merges
+
+#### Fast-Forward Merge
+A fast-forward merge occurs when the target branch has no new commits since the feature branch was created.
+
+```bash
+# Switch to the target branch (e.g., main)
+git switch main
+
+# Merge the feature branch
+git merge feature-branch
+```
+
+Example scenario:
+```
+Before merge:
+main    A---B
+             \
+feature       C---D
+
+After merge:
+main    A---B---C---D
+                    |
+feature            D
+```
+
+#### Three-Way Merge
+When both branches have diverged (have unique commits), Git creates a new merge commit.
+
+```bash
+# Switch to the target branch
+git switch main
+
+# Merge the feature branch
+git merge feature-branch
+```
+
+Example scenario:
+```
+Before merge:
+main    A---B---C
+             \
+feature       D---E
+
+After merge:
+main    A---B---C---F
+             \     /
+feature       D---E
+```
+
+### Handling Merge Conflicts
+
+Merge conflicts occur when Git cannot automatically resolve differences between branches. Here's how to handle them:
+
+1. **Identifying Conflicts**
+   - Git marks conflicts in files using special syntax:
+   ```
+   <<<<<<< HEAD
+   Current branch content
+   =======
+   Incoming branch content
+   >>>>>>> feature-branch
+   ```
+
+2. **Resolving Conflicts**
+   - Open the conflicted files in your editor
+   - Look for the conflict markers (<<<<<<, =======, >>>>>>>)
+   - Choose which changes to keep or combine them
+   - Remove the conflict markers
+   - Save the files
+
+3. **Completing the Merge**
+   ```bash
+   # After resolving conflicts
+   git add <resolved-files>
+   git commit -m "Merge feature-branch: Resolve conflicts"
+   ```
+
+### Best Practices for Merging
+
+1. **Before Merging**
+   - Ensure your working directory is clean
+   - Pull latest changes from the target branch
+   - Test your changes thoroughly
+   - Review the changes to be merged
+
+2. **During Merge Conflicts**
+   - Communicate with team members about conflicting changes
+   - Take time to understand both versions
+   - Consider using visual merge tools
+   - Keep the final code functional and clean
+
+3. **After Merging**
+   - Verify the merged code works as expected
+   - Run tests to ensure nothing broke
+   - Push the merged changes
+   - Delete the merged feature branch if no longer needed
+
+### Pull Request Workflow
+
+Pull Requests (PRs) are a key feature of collaborative development, allowing team members to review, discuss, and improve code before it's merged into the main codebase.
+
+#### Creating a Pull Request
+
+1. **Prepare Your Branch**:
+   ```bash
+   # Create and switch to a feature branch
+   git switch -c feature/new-feature
+
+   # Make your changes and commit them
+   git add .
+   git commit -m "Implement new feature"
+
+   # Push to remote repository
+   git push -u origin feature/new-feature
+   ```
+
+2. **Create PR on GitHub**:
+   - Go to your repository on GitHub
+   - Click "Pull Requests" → "New Pull Request"
+   - Select your feature branch as the source
+   - Select the target branch (usually `main` or `develop`)
+   - Click "Create Pull Request"
+
+#### Writing Good PR Descriptions
+
+1. **Title**:
+   - Clear and concise
+   - Start with type: `feat:`, `fix:`, `docs:`, etc.
+   - Example: `feat: Add user authentication system`
+
+2. **Description Template**:
+   ```markdown
+   ## Changes Made
+   - Implemented X feature
+   - Updated Y configuration
+   - Fixed Z bug
+
+   ## Testing Done
+   - Unit tests added for X
+   - Manual testing performed for Y
+   - Integration tests updated
+
+   ## Screenshots/Videos
+   [If applicable]
+
+   ## Related Issues
+   Closes #123
+   Related to #456
+   ```
+
+#### Reviewing Pull Requests
+
+1. **As a Reviewer**:
+   - Check out the PR branch locally:
+     ```bash
+     git fetch origin
+     git switch pull-request-branch
+     ```
+   - Review code changes:
+     - Code quality and style
+     - Test coverage
+     - Documentation
+     - Performance implications
+   - Provide constructive feedback
+   - Approve or request changes
+
+2. **As an Author**:
+   - Respond to feedback promptly
+   - Make requested changes:
+     ```bash
+     # Make changes
+     git commit -m "Address PR feedback"
+     git push
+     ```
+   - Resolve conversations
+   - Request re-review when ready
+
+#### PR Best Practices
+
+1. **Size and Scope**:
+   - Keep PRs focused and small
+   - One feature/fix per PR
+   - Split large changes into multiple PRs
+
+2. **Quality Checks**:
+   - Run tests before submitting
+   - Ensure CI/CD checks pass
+   - Follow code style guidelines
+   - Update documentation
+
+3. **Communication**:
+   - Be responsive to feedback
+   - Tag relevant team members
+   - Use clear and professional language
+   - Link to related issues/PRs
+
+4. **Merging Strategy**:
+   - Prefer "Squash and Merge" for clean history
+   - Use "Rebase and Merge" for linear history
+   - Delete branch after merging
+
+#### Common PR Workflows
+
+1. **Feature Development**:
+   ```bash
+   git switch -c feature/new-feature
+   # Make changes
+   git commit -m "Implement feature"
+   git push -u origin feature/new-feature
+   # Create PR on GitHub
+   ```
+
+2. **Bugfix**:
+   ```bash
+   git switch -c fix/bug-description
+   # Fix bug
+   git commit -m "Fix: Description"
+   git push -u origin fix/bug-description
+   # Create PR on GitHub
+   ```
+
+3. **Updating PR After Review**:
+   ```bash
+   # Make requested changes
+   git add .
+   git commit -m "Address PR feedback"
+   git push
+   ```
+
+4. **Syncing with Base Branch**:
+   ```bash
+   git switch feature/branch
+   git fetch origin
+   git rebase origin/main
+   git push --force-with-lease
+   ```
+
+#### Handling PR Conflicts
+
+1. **Local Resolution**:
+   ```bash
+   git fetch origin
+   git switch feature-branch
+   git rebase origin/main
+   # Resolve conflicts
+   git add .
+   git rebase --continue
+   git push --force-with-lease
+   ```
+
+2. **Using GitHub Interface**:
+   - Click "Resolve Conflicts" button
+   - Edit files in GitHub editor
+   - Commit changes when done
+
+#### Security Considerations
+
+1. **Before Submitting**:
+   - Remove sensitive data
+   - Check for hardcoded credentials
+   - Verify dependency updates
+
+2. **During Review**:
+   - Check for security vulnerabilities
+   - Validate input handling
+   - Review authentication/authorization changes
