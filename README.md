@@ -2,6 +2,15 @@
 
 This repository is part of a Git & GitHub bootcamp. It is designed to help you learn and practice essential Git and GitHub commands, including pushing, pulling, branching, and collaborating on projects.
 
+## Table of Contents
+- [Project Description](#project-description)
+- [Git Basics: Add and Commit](#git-basics-add-and-commit)
+- [Git Log: Viewing Commit History](#git-log-viewing-commit-history)
+- [Pushing Code to a Remote Branch](#pushing-code-to-a-remote-branch)
+- [Fetching and Pulling Changes from a Remote Branch](#fetching-and-pulling-changes-from-a-remote-branch)
+- [Best Practices for Using Git](#best-practices-for-using-git)
+
+
 ## Project Description
 
 The goal of this bootcamp is to provide hands-on experience with Git and GitHub, enabling you to:
@@ -10,6 +19,7 @@ The goal of this bootcamp is to provide hands-on experience with Git and GitHub,
 - Collaborate effectively using GitHub.
 
 Feel free to explore the repository and practice the commands!
+
 
 ## Git Basics: Add and Commit
 
@@ -133,50 +143,3 @@ This section explains how to push your local code to a remote branch on GitHub.
   git push -u origin main
   ```
 - Replace `main` with `master` if your local branch is named `master`.
-
-### Understanding HEAD and Branches in Git
-
-#### What is HEAD?
-- **HEAD** is a reference to the current commit or branch you are working on.
-- It points to the latest commit in the branch you have checked out.
-- Example: When working on the `master` branch, HEAD points to the most recent commit in `master`.
-
-#### How HEAD Works with Branches
-- Branches are references to specific commits in the repository.
-- HEAD tells you which branch you are currently working on.
-- When you switch branches, HEAD updates to point to the new branch.
-
-#### Key Commands for HEAD and Branches
-1. **Check the Current HEAD**:
-   - Use `git log` to see the current HEAD and its associated branch:
-     ```bash
-     git log
-     ```
-
-2. **Switch HEAD to Another Branch**:
-   - Use `git checkout` or `git switch` to move HEAD to a different branch:
-     ```bash
-     git checkout <branch-name>
-     ```
-     Or:
-     ```bash
-     git switch <branch-name>
-     ```
-
-3. **Create a New Branch and Update HEAD**:
-   - Create a new branch and switch HEAD to it:
-     ```bash
-     git branch <new-branch-name>
-     git switch <new-branch-name>
-     ```
-
-4. **Return HEAD to the Master/Main Branch**:
-   - Switch back to the `master` or `main` branch:
-     ```bash
-     git switch master
-     ```
-
-#### Why HEAD Matters
-- HEAD helps you understand which branch you are currently working on.
-- It ensures that new commits are added to the correct branch.
-- You can easily switch between branches to work on different features or versions of the codebase.
