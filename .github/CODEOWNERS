@@ -1,0 +1,26 @@
+# This is a CODEOWNERS file.
+# Each line is a file pattern followed by one or more owners.
+
+# These owners will be the default owners for everything in
+# the repo. Unless a later match takes precedence,
+# @ErezEindor will be requested for review when someone 
+# opens a pull request.
+*       @ErezEindor
+
+# Order is important; the last matching pattern takes the most
+# precedence.
+
+# Git and GitHub documentation
+*.md    @ErezEindor
+/docs/  @ErezEindor
+
+# Python files
+*.py    @ErezEindor
+
+# Configuration files
+*.yml   @ErezEindor
+*.yaml  @ErezEindor
+*.json  @ErezEindor
+
+# GitHub specific files
+/.github/   @ErezEindor
