@@ -7,8 +7,9 @@ This repository is part of a Git & GitHub bootcamp. It is designed to help you l
 - [Git Basics: Add and Commit](#git-basics-add-and-commit)
 - [Git Log: Viewing Commit History](#git-log-viewing-commit-history)
 - [Pushing Code to a Remote Branch](#pushing-code-to-a-remote-branch)
-- [Fetching and Pulling Changes from a Remote Branch](#fetching-and-pulling-changes-from-a-remote-branch)
-- [Best Practices for Using Git](#best-practices-for-using-git)
+- [Branch Management](#branch-management)
+  - [Branch Operations](#branch-operations)
+  - [Best Practices for Branch Management](#best-practices-for-branch-management)
 
 
 ## Project Description
@@ -143,3 +144,73 @@ This section explains how to push your local code to a remote branch on GitHub.
   git push -u origin main
   ```
 - Replace `main` with `master` if your local branch is named `master`.
+
+## Branch Management
+
+Managing branches effectively is crucial for maintaining a clean and organized Git repository. This section covers essential branch operations including creation, renaming, and deletion.
+
+### Branch Operations
+
+#### Creating Branches
+```bash
+# Create and switch to a new branch
+git switch -c <new-branch-name>
+
+# Alternative method (legacy)
+git checkout -b <new-branch-name>
+```
+
+#### Renaming Branches
+1. **Switch to the branch you want to rename**:
+   ```bash
+   git switch <branch-to-rename>
+   ```
+
+2. **Rename the current branch**:
+   ```bash
+   git branch -m <new-name>
+   ```
+
+   Note: You must be checked out on the branch you wish to rename.
+
+#### Deleting Branches
+
+1. **Switch to a different branch first**:
+   ```bash
+   git switch main  # or any branch other than the one you want to delete
+   ```
+
+2. **Delete a fully merged branch**:
+   ```bash
+   git branch -d <branch-name>
+   ```
+
+3. **Force delete an unmerged branch**:
+   ```bash
+   git branch -D <branch-name>
+   ```
+
+   Warning: Using `-D` will delete the branch regardless of its merge status. Make sure you want to discard any unmerged changes.
+
+### Best Practices for Branch Management
+
+1. **Branch Naming Conventions**:
+   - Use descriptive names that reflect the purpose
+   - Use hyphens or underscores to separate words
+   - Consider prefixes like:
+     - `feature/` for new features
+     - `bugfix/` for bug fixes
+     - `hotfix/` for urgent fixes
+     - `release/` for release branches
+
+2. **Branch Lifecycle**:
+   - Create branches for specific purposes
+   - Keep branches short-lived when possible
+   - Delete branches after merging to maintain a clean repository
+   - Regularly update branches with changes from main/master
+
+3. **Safety Measures**:
+   - Never delete a branch while checked out to it
+   - Always verify the merge status before deletion
+   - Use `-d` instead of `-D` as a safe default
+   - Keep your local branch list clean by removing merged branches
